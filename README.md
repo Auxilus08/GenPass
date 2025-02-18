@@ -60,7 +60,7 @@ Note: For Gmail, you'll need to use an App Password, not your regular password.
 
 ### Starting the Application
 ```bash
-python -m src.main
+python run.py
 ```
 
 ### First-Time Setup
@@ -145,7 +145,7 @@ python -m src.main
 - [Tkinter](https://docs.python.org/3/library/tkinter.html) for GUI
 
 ## Version History
-- v2.0.0 - Added 2FA and dark theme
+- v2.0.0 - Added 2FA and better GUI
 - v1.0.0 - Initial
 
 ## Support
