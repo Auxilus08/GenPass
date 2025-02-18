@@ -1,0 +1,6 @@
+{
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": 587,
+    "sender_email": "genpass47@gmail.com",
+    "sender_password": "oimmfjkichpkvjjq"
+} 
