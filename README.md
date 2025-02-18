@@ -1,42 +1,159 @@
-## GenPass
+# GenPass - Secure Password Manager
+
+## Overview
+GenPass is a secure, feature-rich password manager built with Python, offering both command-line and graphical user interfaces. It provides robust password generation, encrypted storage, and two-factor authentication capabilities.
 
 
-### Description
-GenPass is a Python application designed to securely generate, store, and manage passwords. The application features a user-friendly graphical interface built with Tkinter, allowing users to create passwords of varying lengths and strengths, save them along with usernames and site details to a text file, and retrieve stored credentials with ease. The application also integrates clipboard functionality for quick access to generated passwords.
+## Features
+- 🔐 Secure password generation with customizable complexity
+- 📱 Two-factor authentication (2FA) support
+- 🎨 Dark/Light theme support
+- 🔒 AES-256 encryption for stored passwords
+- 📧 Email-based verification
+- 👥 Multi-user support
+- 🖥️ Cross-platform compatibility
+- 🔄 Automatic password strength assessment
+- 📋 Clipboard integration for easy copying
 
-### Packages and Their Usage
-#### 1. tkinter
-Description: tkinter is the standard Python interface to the Tk GUI toolkit. It is used to create the graphical user interface (GUI) for GenPass.
-Usage: In GenPass, tkinter is utilized to build and manage the application’s window, labels, buttons, and other interactive elements. It handles user inputs for generating passwords, displaying results, and saving or fetching credentials.
+## Installation
 
-#### 2. ttk
-Description: ttk (Themed Tk) is a module within tkinter that provides access to advanced widgets and styles.
-Usage: ttk is used in GenPass to create the dropdown menu (ComboBox) that allows users to select password strength options. It enhances the visual appearance of the GUI components.
+### Prerequisites
+- Python 3.7 or higher
+- pip (Python package installer)
+- Operating System: Windows/macOS/Linux
 
-#### 3. pyperclip
-Description: pyperclip is a cross-platform Python module for clipboard operations.
-Usage: In GenPass, pyperclip is used to copy generated passwords to the clipboard. This allows users to easily paste the passwords into other applications or fields without manually copying them.
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/akshat0824/GenPass.git
+cd GenPass
+```
 
-#### 4. os
-Description: os is a module that provides a way to interact with the operating system, including file operations.
-Usage: The os module is used in GenPass to check for the existence of the password storage file (passwords.txt) and handle file operations for saving and retrieving passwords.
+### Step 2: Create Virtual Environment (Recommended)
+```bash
+# Windows
+python -m venv venv
+.\venv\Scripts\activate
 
-### Installation 
- #### 1. Clone the repository
-     git clone https://github.com/akshat0824/GenPass.git
-     cd GenPass
-     
- #### 2. Install required packages
-     pip install pyperclip cryptography
- #### 3. Run the application
-     python main.py
+# macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### Step 3: Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### Step 4: Configure Email Settings
+Create `config/email_config.json`:
+```json
+{
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": 587,
+    "sender_email": "your-email@gmail.com",
+    "sender_password": "your-app-specific-password"
+}
+```
+Note: For Gmail, you'll need to use an App Password, not your regular password.
+
+## Usage
+
+### Starting the Application
+```bash
+python run.py
+```
+
+### First-Time Setup
+1. Launch the application
+2. Click "Register" to create a new account
+3. Enter your details:
+   - Username (3-30 characters, alphanumeric)
+   - Email (valid email address)
+   - Password
+4. Verify your email using the OTP sent
+5. Log in with your credentials
+
+### Password Generation
+1. Select desired password length (1-128 characters)
+2. Choose password strength:
+   - Basic (lowercase only)
+   - Medium (lowercase + uppercase)
+   - Strong (lowercase + uppercase + numbers)
+   - Very Strong (all characters + symbols)
+3. Click "Generate Password"
+4. Use "Copy to Clipboard" to copy the password
+
+### Password Storage
+- Save passwords with associated website/service names
+- View stored passwords in the password list
+- Delete passwords when no longer needed
+- All passwords are encrypted using AES-256 encryption
+
+### Theme Customization
+- Toggle between Light/Dark themes using the theme button
+- Theme preference is saved between sessions
+
+## Security Features
+
+### Password Security
+- Passwords are hashed using SHA-256
+- Salt and pepper are used for additional security
+- Encrypted storage using Fernet (AES-256)
+- Automatic password strength assessment
+
+### Two-Factor Authentication
+- Email-based 2FA
+- Time-based one-time passwords (TOTP)
+- 5-minute validity window
+- Rate limiting for OTP requests
+
+### Data Protection
+- All stored passwords are encrypted
+- Secure key storage
+- Protection against brute force attacks
+- Account lockout after failed attempts
 
 
-### Contributing
-Contributions are welcome! Feel free to submit issues or pull requests. For questions or suggestions, open an issue or contact me directly.
+### Common Issues and Solutions
+
+1. **Email Configuration**
+   - Error: "Failed to send email"
+   - Solution: Check email credentials and app password
+
+2. **Database Access**
+   - Error: "Permission denied"
+   - Solution: Check file permissions in data directory
+
+3. **Dependency Issues**
+   - Error: "Module not found"
+   - Solution: Verify virtual environment activation and dependencies
+
+## Contributing
+1. Fork the repository
+2. Create a feature branch
+3. Commit changes
+4. Push to the branch
+5. Create a Pull Request
 
 
-### Acknowledgements
-1.Tkinter Documentation 
-2.Cryptography Documentation
-3.JSON Documentation
+## Authors
+- Akshat Tiwari - Initial work - [akshat0824](https://github.com/akshat0824)
+
+## Acknowledgments
+- [Cryptography](https://cryptography.io/) for encryption
+- [PyOTP](https://pyauth.github.io/pyotp/) for 2FA
+- [Tkinter](https://docs.python.org/3/library/tkinter.html) for GUI
+
+## Version History
+- v2.0.0 - Added 2FA and better GUI
+- v1.0.0 - Initial
+
+## Support
+For support, please open an issue in the GitHub repository or contact the maintainers.
+
+## Roadmap
+- [ ] Browser extension integration
+- [ ] Cloud backup support
+- [ ] Password sharing functionality
+- [ ] Mobile application
+- [ ] Hardware key support
