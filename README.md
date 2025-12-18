@@ -75,5 +75,5 @@ docker compose run --rm -e DISPLAY=$DISPLAY genpass python run.py
 - Email send fails: verify SMTP host/port and that you are using an app password when required (e.g., Gmail).
 - Tkinter missing locally: install your OS Tk package (e.g., `sudo apt-get install python3-tk`).
 
-## License
-See repository license (if present).
+
+
