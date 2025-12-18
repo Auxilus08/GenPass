@@ -1,159 +1,79 @@
-# GenPass - Secure Password Manager
+# GenPass
 
-## Overview
-GenPass is a secure, feature-rich password manager built with Python, offering both command-line and graphical user interfaces. It provides robust password generation, encrypted storage, and two-factor authentication capabilities.
-
+GenPass is a Python desktop password manager (Tkinter) with encrypted storage, two-factor authentication, and email-based OTP verification. It ships with a simple GUI, sensible defaults, and optional Docker packaging.
 
 ## Features
-- 🔐 Secure password generation with customizable complexity
-- 📱 Two-factor authentication (2FA) support
-- 🎨 Dark/Light theme support
-- 🔒 AES-256 encryption for stored passwords
-- 📧 Email-based verification
-- 👥 Multi-user support
-- 🖥️ Cross-platform compatibility
-- 🔄 Automatic password strength assessment
-- 📋 Clipboard integration for easy copying
+- Password generation with selectable strength and length
+- Encrypted storage backed by `cryptography` (AES/Fernet)
+- Email OTP for 2FA and account verification
+- Theme preference persistence (light/dark)
+- Clipboard copy helpers and strength feedback
 
-## Installation
+## Tech Stack
+- Python 3.11, Tkinter UI
+- `cryptography`, `pyotp`, `pyperclip`
+- Logging to `genpass.log`
 
-### Prerequisites
-- Python 3.7 or higher
-- pip (Python package installer)
-- Operating System: Windows/macOS/Linux
+## Directory Layout
+- `run.py`: CLI entry that boots the Tkinter app
+- `src/`: application code
+- `config/`: user-supplied settings (created if missing)
+- `data/`: runtime data store (created if missing)
 
-### Step 1: Clone the Repository
+## Prerequisites
+- Local: Python 3.8+ with Tk available, `pip`
+- Docker option: Docker and Docker Compose (v2). For X11 passthrough on Linux, `xhost` access to your display may be required.
+
+## Quickstart (Local)
+1) Create a virtual environment and install deps
 ```bash
-git clone https://github.com/akshat0824/GenPass.git
-cd GenPass
-```
-
-### Step 2: Create Virtual Environment (Recommended)
-```bash
-# Windows
-python -m venv venv
-.\venv\Scripts\activate
-
-# macOS/Linux
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### Step 3: Install Dependencies
-```bash
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
-
-### Step 4: Configure Email Settings
-Create `config/email_config.json`:
+2) Configure outgoing email (needed for OTP). Create or edit `config/email_config.json`:
 ```json
 {
-    "smtp_server": "smtp.gmail.com",
-    "smtp_port": 587,
-    "sender_email": "your-email@gmail.com",
-    "sender_password": "your-app-specific-password"
+  "smtp_server": "smtp.gmail.com",
+  "smtp_port": 587,
+  "sender_email": "your-email@gmail.com",
+  "sender_password": "your-app-password"
 }
 ```
-Note: For Gmail, you'll need to use an App Password, not your regular password.
-
-## Usage
-
-### Starting the Application
+3) Run the app
 ```bash
 python run.py
 ```
+On first launch, `config/` and `data/` are created automatically. Logs go to `genpass.log`.
 
-### First-Time Setup
-1. Launch the application
-2. Click "Register" to create a new account
-3. Enter your details:
-   - Username (3-30 characters, alphanumeric)
-   - Email (valid email address)
-   - Password
-4. Verify your email using the OTP sent
-5. Log in with your credentials
+## Quickstart (Docker)
+The Docker image bundles Tkinter and Xvfb so the GUI can start inside the container. To see the UI on your host, allow X11 and share your display.
 
-### Password Generation
-1. Select desired password length (1-128 characters)
-2. Choose password strength:
-   - Basic (lowercase only)
-   - Medium (lowercase + uppercase)
-   - Strong (lowercase + uppercase + numbers)
-   - Very Strong (all characters + symbols)
-3. Click "Generate Password"
-4. Use "Copy to Clipboard" to copy the password
+```bash
+# from repo root
+cd src
+# allow local docker to access X11 (Linux)
+xhost +local:docker
+# launch
+DISPLAY=${DISPLAY:-:0} docker compose up --build
+```
+Notes:
+- The compose file lives in `src/docker-compose.yml` and builds using the repo root as context.
+- Config and data persist via bind mounts: `../config` -> `/app/config`.
+- If you prefer the built-in virtual display, keep the default `DISPLAY=:99`; if you want host rendering, override the command, e.g.:
+```bash
+docker compose run --rm -e DISPLAY=$DISPLAY genpass python run.py
+```
 
-### Password Storage
-- Save passwords with associated website/service names
-- View stored passwords in the password list
-- Delete passwords when no longer needed
-- All passwords are encrypted using AES-256 encryption
+## Usage Tips
+- Register then verify via the emailed OTP to access the vault.
+- Passwords and preferences live under `data/` and `config/`; back them up to preserve your vault.
+- If dependencies are missing, the app shows a dialog pointing to `pip install -r requirements.txt`.
 
-### Theme Customization
-- Toggle between Light/Dark themes using the theme button
-- Theme preference is saved between sessions
+## Troubleshooting
+- GUI does not appear in Docker: ensure your host X server allows local connections (`xhost +local:docker`) and that `DISPLAY` matches your host (often `:0`).
+- Email send fails: verify SMTP host/port and that you are using an app password when required (e.g., Gmail).
+- Tkinter missing locally: install your OS Tk package (e.g., `sudo apt-get install python3-tk`).
 
-## Security Features
-
-### Password Security
-- Passwords are hashed using SHA-256
-- Salt and pepper are used for additional security
-- Encrypted storage using Fernet (AES-256)
-- Automatic password strength assessment
-
-### Two-Factor Authentication
-- Email-based 2FA
-- Time-based one-time passwords (TOTP)
-- 5-minute validity window
-- Rate limiting for OTP requests
-
-### Data Protection
-- All stored passwords are encrypted
-- Secure key storage
-- Protection against brute force attacks
-- Account lockout after failed attempts
-
-
-### Common Issues and Solutions
-
-1. **Email Configuration**
-   - Error: "Failed to send email"
-   - Solution: Check email credentials and app password
-
-2. **Database Access**
-   - Error: "Permission denied"
-   - Solution: Check file permissions in data directory
-
-3. **Dependency Issues**
-   - Error: "Module not found"
-   - Solution: Verify virtual environment activation and dependencies
-
-## Contributing
-1. Fork the repository
-2. Create a feature branch
-3. Commit changes
-4. Push to the branch
-5. Create a Pull Request
-
-
-## Authors
-- Akshat Tiwari - Initial work - [akshat0824](https://github.com/akshat0824)
-
-## Acknowledgments
-- [Cryptography](https://cryptography.io/) for encryption
-- [PyOTP](https://pyauth.github.io/pyotp/) for 2FA
-- [Tkinter](https://docs.python.org/3/library/tkinter.html) for GUI
-
-## Version History
-- v2.0.0 - Added 2FA and better GUI
-- v1.0.0 - Initial
-
-## Support
-For support, please open an issue in the GitHub repository or contact the maintainers.
-
-## Roadmap
-- [ ] Browser extension integration
-- [ ] Cloud backup support
-- [ ] Password sharing functionality
-- [ ] Mobile application
-- [ ] Hardware key support
+## License
+See repository license (if present).
